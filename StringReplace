@@ -1,0 +1,18 @@
+#!/bin/bash
+
+read -p "Enter the value common (Name): " OP_ORA
+read -p "Enter the value for OLD_Add (Address): " OLD_DB
+read -p "Enter the value for NEW_Add (New Address ): " NEW_DB
+read -p "Enter the value for old pincode  (Old Pincode): " OLD_ORA_INSTANCE
+read -p "Enter the value for new pincode (New pincode): " NEW_ORA_INSTANCE
+for i in $(cat list/afterset.txt); do
+ssh -q -o StrictHostKeyChecking=no "$i" << EOD
+        echo "$i"
+        sudo su - <USER-Name>
+        mkdir /home/OLD_Profile_Details/
+        cp /home/Profile_Details/My_details.txt /home/OLD_Profile_Details/
+        sed -i -e "s/OP_ORA_INST=$OLD_DB/OP_ORA_INST=$NEW_DB/" -e "/$OP_ORA/ s/$OLD_ORA_INSTANCE/$NEW_ORA_INSTANCE/" /home/Profile_Details/My_details.txt
+        sdiff -s /home/Profile_Details/My_details.txt /home/OLD_Profile_Details/My_details.txt
+        
+EOD
+done        
